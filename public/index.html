@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopee AFF AI Ads Manager</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;color:#172033}.wrap{max-width:1100px;margin:auto;padding:24px}
+h1{margin:0 0 6px}.sub{color:#667085;margin-bottom:24px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 3px 16px #0000000d}.big{font-size:28px;font-weight:700}
+.section{margin-top:18px}.row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.badge{padding:6px 10px;border-radius:999px;background:#eef4ff;display:inline-block}.danger{background:#fff0f0}
+input,select,button{padding:10px;border:1px solid #d0d5dd;border-radius:10px}button{cursor:pointer;background:#172033;color:#fff}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr 1fr}.hide-sm{display:none}}
+</style></head>
+<body><div class="wrap">
+<h1>Shopee AFF AI Ads Manager</h1><div class="sub">V1 — คุม CPC จากข้อมูล Facebook + ค่าคอม Shopee วันถัดไป</div>
+<div class="grid">
+<div class="card"><div>ค่าแอดวันนี้</div><div class="big">฿0</div><small>รอเชื่อม Meta</small></div>
+<div class="card"><div>Clicks วันนี้</div><div class="big">0</div><small>รอเชื่อม Meta</small></div>
+<div class="card"><div>Commission ล่าสุด</div><div class="big">฿0</div><small>รอข้อมูล Shopee</small></div>
+</div>
+<div class="card section"><h3>สินค้า / Ads</h3>
+<div class="row"><b>สินค้า</b><b>CPC</b><b>Max CPC</b><b class="hide-sm">Spend</b><b>สถานะ</b></div>
+<div class="row"><span>ยังไม่มีข้อมูล</span><span>-</span><span>-</span><span class="hide-sm">-</span><span class="badge">WAITING</span></div>
+</div>
+<div class="grid section">
+<div class="card"><h3>AI Control</h3>
+<label>โหมด</label><br><select><option>ดูอย่างเดียว</option><option selected>แนะนำ</option><option>Auto (ปิดไว้ก่อน)</option></select>
+<p><label>กำไรขั้นต่ำ %</label><br><input type="number" value="30"></p>
+<p><label>งบสูงสุด/วัน</label><br><input type="number" value="3000"></p>
+</div>
+<div class="card"><h3>Shopee Data</h3>
+<p>อัปโหลด CSV จะเพิ่มในขั้นต่อไป</p><button disabled>Upload CSV</button>
+</div>
+<div class="card"><h3>Connections</h3>
+<p>Meta Marketing API</p><span class="badge danger">ยังไม่เชื่อม</span>
+<p>OpenAI</p><span class="badge danger">ยังไม่เชื่อม</span>
+</div>
+</div>
+<div class="card section"><h3>สูตร Max CPC</h3>
+<p>รายได้ต่อคลิก = Commission ที่จับคู่ได้ ÷ Clicks ของวันต้นทาง</p>
+<p>Max CPC = รายได้ต่อคลิก × (1 - กำไรขั้นต่ำ)</p>
+</div>
+</div></body></html>
