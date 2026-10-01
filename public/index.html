@@ -8,7 +8,7 @@ body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;color:#172033}.wra
 <div><label>Facebook Page ID</label><input placeholder="Page ID"><div class="muted">เพจที่จะใช้เป็นตัวตนของโฆษณา</div></div>
 <div class="full"><label>Meta Access Token</label><input type="password" placeholder="เก็บฝั่ง Server เท่านั้น"><div class="muted">สร้างจาก Meta for Developers / Business app — ต้องมีสิทธิ์ที่ใช้จัดการ Ads</div></div>
 <div><label>Pixel ID (ถ้ามี)</label><input placeholder="ไม่บังคับใน V1"></div><div><label>Instagram Account ID (ถ้าใช้)</label><input placeholder="ไม่บังคับ"></div>
-<div class="full"><button>ทดสอบการเชื่อม Meta</button></div></div></div>
+<div class="full"><button onclick="testMeta()">ทดสอบการเชื่อม Meta</button><div id="metaResult" class="muted"></div></div></div></div>
 
 <div class="card section"><h2>2. สร้างแอด Shopee Affiliate</h2><div class="form">
 <div class="full"><label>ลิงก์ Shopee Affiliate</label><input placeholder="วางลิงก์ AFF ของสินค้านี้"></div>
@@ -19,13 +19,23 @@ body{font-family:Arial,sans-serif;background:#f5f7fb;margin:0;color:#172033}.wra
 <div><label>ประเทศ</label><select><option>Thailand</option></select></div><div><label>เพศ</label><select><option>ทั้งหมด</option><option>ชาย</option><option>หญิง</option></select></div>
 <div class="full"><label>ข้อความโฆษณา</label><textarea rows="4" placeholder="ข้อความ Primary Text"></textarea></div>
 <div><label>Headline</label><input placeholder="หัวข้อโฆษณา"></div><div><label>CTA</label><select><option>Shop Now</option><option>Learn More</option></select></div>
-<div class="full"><label>รูป / วิดีโอ Creative</label><input type="file" accept="image/*,video/*"></div>
+<div class="full"><label>Meta Image Hash</label><input id="imageHash" placeholder="Image Hash จากรูปที่อัปโหลดใน Meta"><div class="muted">V1 ใช้ Image Hash เพื่อสร้างแอดจริงอย่างปลอดภัย</div></div>
 <div class="full"><div class="note">ค่าเริ่มต้นจะสร้างเป็น PAUSED ก่อน เพื่อไม่ให้เสียเงินทันที หลังตรวจรายละเอียดแล้วจึงกดเปิดแอด</div></div>
-<div><button class="orange">สร้างแอด (PAUSED)</button></div><div><button>บันทึกเป็น Draft</button></div></div></div>
+<div><button class="orange" onclick="createAd()">สร้างแอดจริง (PAUSED)</button></div><div><button>บันทึกเป็น Draft</button></div></div></div>
 
 <div class="grid section"><div class="card"><h3>3. AI Control</h3><label>โหมด</label><select><option>ดูอย่างเดียว</option><option selected>แนะนำ</option><option>Auto</option></select><p><label>กำไรขั้นต่ำ %</label><input type="number" value="30"></p><p><label>งบสูงสุดรวม/วัน</label><input type="number" value="3000"></p></div>
-<div class="card"><h3>4. เปิด / ปิดแอด</h3><p class="muted">เมื่อเชื่อม Meta แล้ว จะแสดง Campaign / Ad Set / Ad พร้อม Spend, Click, CPC</p><div class="switchrow"><button>เปิด</button><button>ปิด</button></div></div>
-<div class="card"><h3>5. OpenAI</h3><label>OpenAI API Key</label><input type="password" placeholder="เก็บฝั่ง Server เท่านั้น"><p class="muted">ใช้วิเคราะห์ผลและเสนอ Max CPC/การปรับงบ โดย Rule Engine เป็นตัวจำกัดงบ</p><button>ทดสอบ OpenAI</button></div></div>
+<div class="card"><h3>4. เปิด / ปิดแอด</h3><p class="muted">ดึงรายการจริงจาก Meta แล้วกดเปิด/ปิดรายแอด</p><button onclick="loadAds()">โหลด Ads</button><div id="ads"></div></div>
+<div class="card"><h3>5. OpenAI</h3><label>OpenAI API Key</label><input type="password" placeholder="เก็บฝั่ง Server เท่านั้น"><p class="muted">ใช้วิเคราะห์ผลและเสนอ Max CPC/การปรับงบ โดย Rule Engine เป็นตัวจำกัดงบ</p><button onclick="testAI()">ทดสอบ OpenAI</button><div id="aiResult" class="muted"></div></div></div>
 
 <div class="card section"><h3>สูตร Max CPC</h3><p>รายได้ต่อคลิก = Commission ที่จับคู่ได้ ÷ Clicks ของวันต้นทาง</p><p>Max CPC = รายได้ต่อคลิก × (1 - กำไรขั้นต่ำ)</p></div>
-</div></body></html>
+<div id="toast" class="note section">ระบบพร้อม — คีย์จริงต้องเก็บใน Railway Variables ไม่เก็บในหน้าเว็บ</div></div>
+<script>
+const $=s=>document.querySelector(s); const inputs=()=>[...document.querySelectorAll('input,textarea,select')];
+async function api(url,opt){const r=await fetch(url,opt);const j=await r.json();if(!r.ok)throw Error(j.error||'เกิดข้อผิดพลาด');return j}
+async function testMeta(){try{const j=await api('/api/meta/test');$('#metaResult').textContent='เชื่อมแล้ว: '+j.data.name+' ('+j.data.currency+')'}catch(e){$('#metaResult').textContent=e.message}}
+async function loadAds(){try{const j=await api('/api/meta/ads');$('#ads').innerHTML=(j.data||[]).map(a=>'<p><b>'+a.name+'</b><br><small>'+a.effective_status+'</small> <button onclick="setStatus(\''+a.id+'\',\'ACTIVE\')">เปิด</button> <button onclick="setStatus(\''+a.id+'\',\'PAUSED\')">ปิด</button></p>').join('')||'ไม่มี Ads'}catch(e){$('#ads').textContent=e.message}}
+async function setStatus(id,status){try{await api('/api/meta/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,status})});await loadAds()}catch(e){alert(e.message)}}
+async function createAd(){const a=inputs();const vals=a.map(x=>x.value);try{const body={url:vals.find(v=>v&&v.includes('http'))||'',name:a.find(x=>x.placeholder&&x.placeholder.includes('ไฟฉุกเฉิน'))?.value||'',dailyBudget:Number(a.find(x=>x.type==='number'&&x.value==='300')?.value||300),ageMin:18,ageMax:65,text:document.querySelector('textarea')?.value||'',headline:a.find(x=>x.placeholder==='หัวข้อโฆษณา')?.value||'',imageHash:$('#imageHash').value};const j=await api('/api/meta/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});alert('สร้างสำเร็จแบบ PAUSED\nAd ID: '+j.ad);loadAds()}catch(e){alert(e.message)}}
+async function testAI(){try{const j=await api('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({spend:0,clicks:0,cpc:0})});$('#aiResult').textContent=j.text||'OpenAI เชื่อมสำเร็จ'}catch(e){$('#aiResult').textContent=e.message}}
+fetch('/api/config').then(r=>r.json()).then(j=>{$('#toast').textContent='Meta: '+(j.meta?'เชื่อมแล้ว':'รอ Railway Variables')+' | OpenAI: '+(j.openai?'เชื่อมแล้ว':'รอ Railway Variables')});
+</script></body></html>
