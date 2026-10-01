@@ -13,3 +13,7 @@ Starter V1 for Railway.
 - Shopee CSV importer
 - OpenAI analysis
 - Rule engine and audit logs
+
+
+## Deployment
+Force production deployment after multi-page dashboard/settings/create split. Build marker: 2026-10-01-multipage-v2.
