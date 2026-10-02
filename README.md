@@ -17,3 +17,6 @@ Starter V1 for Railway.
 
 ## Deployment
 Force production deployment after multi-page dashboard/settings/create split. Build marker: 2026-10-01-multipage-v2.
+
+
+Post selection: choose a Facebook Page and load posts. The server retrieves the selected Page token without exposing it to the browser. Select a post to fill its Post ID; reconnect Meta in Settings if the token is invalid.
