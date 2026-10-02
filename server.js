@@ -1,3 +1,4 @@
+// Page tokens stay server-side when loading the selected Page's posts.
 const express=require('express');const app=express();app.use(express.json({limit:'15mb'}));app.use(express.static('public'));
 function safeMetaResult(value){if(Array.isArray(value))return value.map(safeMetaResult);if(value&&typeof value==='object'){return Object.fromEntries(Object.entries(value).filter(([key])=>!['access_token','next','previous'].includes(key)).map(([key,item])=>[key,safeMetaResult(item)]))}return value}
 const G='https://graph.facebook.com/v24.0';const runtime={};function cfg(){return{token:runtime.META_ACCESS_TOKEN||process.env.META_ACCESS_TOKEN,account:(runtime.META_AD_ACCOUNT_ID||process.env.META_AD_ACCOUNT_ID||'').replace(/^act_/,''),page:runtime.META_PAGE_ID||process.env.META_PAGE_ID,openai:runtime.OPENAI_API_KEY||process.env.OPENAI_API_KEY}}
