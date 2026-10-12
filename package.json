@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "test": "node security.test.js"
+    "test": "node security.test.js && node meta-guard.test.js && node meta-poll.test.js"
   },
   "dependencies": {
     "express": "^4.21.2"
